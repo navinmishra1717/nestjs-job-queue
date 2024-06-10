@@ -21,6 +21,8 @@ export class EmailConsumer {
       data: { email, name },
     } = job;
 
+    // construct the welcome email content here using ejs template
+
     this.nodemailerService.sendEmail(
       email,
       "Welcome!!",
