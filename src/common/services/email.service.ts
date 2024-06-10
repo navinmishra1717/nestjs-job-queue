@@ -12,7 +12,7 @@ export class EmailService {
   ) {}
   async sendEmail<T extends EmailType>(emailType: T, data: EmailSendData[T]) {
     const job = await this.emailQueue.add(emailType, {
-      data,
+      ...data,
     });
 
     console.log(`Job ${job.id} has been added to the queue.`);

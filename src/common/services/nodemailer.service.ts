@@ -19,7 +19,7 @@ export class NodemailerService {
       from: "willandstate@gmail.com",
       to,
       subject,
-      content,
+      text: content,
     };
     return this.transporter.sendMail(mailOptions);
   }
