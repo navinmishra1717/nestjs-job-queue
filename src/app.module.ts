@@ -5,10 +5,13 @@ import { BullModule } from "@nestjs/bull";
 import { UsersModule } from "./users/users.module";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
+import { BullBoardModule } from "@bull-board/nestjs";
+import { ExpressAdapter } from "@bull-board/express";
+// import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 
 @Module({
   imports: [
+    UsersModule,
     BullModule.forRoot({
       redis: {
         host: "localhost",
@@ -16,11 +19,10 @@ import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
       },
     }),
 
-    BullModule.registerQueue({
-      name: "emailSending",
+    BullBoardModule.forRoot({
+      route: "/queues",
+      adapter: ExpressAdapter,
     }),
-
-    UsersModule,
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
