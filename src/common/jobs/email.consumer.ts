@@ -1,7 +1,7 @@
 import { OnQueueActive, Process, Processor } from "@nestjs/bull";
 import { Job } from "bull";
 import { EmailType } from "../enum/email-type.enum";
-import { EmailSendData, IMail } from "../interface/email.interface";
+import { EmailSendData } from "../interface/email.interface";
 import { NodemailerService } from "../services/nodemailer.service";
 
 @Processor("emailSending")
@@ -11,14 +11,12 @@ export class EmailConsumer {
   @OnQueueActive()
   onActive(job: Job) {
     console.log(
-      `Processing job ${job.id} of type ${job.name} with data ${job.data}...`,
+      `Processing job ${job.id} of type "${job.name}" with data ${JSON.stringify(job.data)}...`,
     );
   }
 
   @Process(EmailType.WELCOME)
   async sendWelcomeEmail(job: Job<EmailSendData[EmailType.WELCOME]>) {
-    console.log(1111111111);
-    console.log(job.data, "job data");
     const {
       data: { email, name },
     } = job;
@@ -30,8 +28,19 @@ export class EmailConsumer {
     );
   }
 
-  async sendResetPasswordEmail(job: Job<IMail>) {
-    const { data } = job;
+  @Process(EmailType.RESET_PASSWORD)
+  async sendResetPasswordEmail(
+    job: Job<EmailSendData[EmailType.RESET_PASSWORD]>,
+  ) {
+    const {
+      data: { email, name, token },
+    } = job;
+
     // send the reset password email here
+    // this.nodemailerService.sendEmail(
+    //   email,
+    //   "Reset Password!!",
+    //   `Hello ${name}, this is your reset password token: ${token}`,
+    // );
   }
 }

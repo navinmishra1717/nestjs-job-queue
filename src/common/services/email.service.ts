@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { EmailSendData, IMail } from "../interface/email.interface";
+import { EmailSendData } from "../interface/email.interface";
 import { Queue } from "bull";
 import { InjectQueue } from "@nestjs/bull";
 import { EmailType } from "../enum/email-type.enum";

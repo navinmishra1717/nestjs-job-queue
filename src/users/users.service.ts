@@ -18,11 +18,6 @@ export class UsersService {
     await this.emailService.sendEmail<EmailType.WELCOME>(EmailType.WELCOME, {
       email,
       name,
-      // to: email,
-      // subject: "Welcome!!",
-      // text: `Hello ${name}, welcome to our application!`,
-      // email,
-      // name,
     });
     return createUserInput;
   }

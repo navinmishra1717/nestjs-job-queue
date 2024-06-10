@@ -21,6 +21,9 @@
   },
   "dependencies": {
     "@apollo/server": "^4.10.4",
+    "@bull-board/api": "^5.20.1",
+    "@bull-board/express": "^5.20.1",
+    "@bull-board/nestjs": "^5.20.1",
     "@nestjs/apollo": "^12.1.0",
     "@nestjs/bull": "^10.1.1",
     "@nestjs/common": "^10.0.0",
