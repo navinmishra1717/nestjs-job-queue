@@ -1,8 +1,6 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { BullModule } from "@nestjs/bull";
-import { UsersModule } from "./users/users.module";
+import { UsersModule } from "./modules/users/users.module";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { BullBoardModule } from "@bull-board/nestjs";
@@ -32,7 +30,5 @@ import { ExpressAdapter } from "@bull-board/express";
       include: [UsersModule],
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

@@ -3,6 +3,7 @@ import { Job } from "bull";
 import { EmailType } from "../enum/email-type.enum";
 import { EmailSendData } from "../interface/email.interface";
 import { NodemailerService } from "../services/nodemailer.service";
+import { getTemplate } from "../helper/template.helper";
 
 @Processor("emailSending")
 export class EmailConsumer {
@@ -21,13 +22,9 @@ export class EmailConsumer {
       data: { email, name },
     } = job;
 
-    // construct the welcome email content here using ejs template
+    const content = getTemplate("welcomeEmail", { name });
 
-    this.nodemailerService.sendEmail(
-      email,
-      "Welcome!!",
-      `Hello ${name}, welcome to our application!`,
-    );
+    this.nodemailerService.sendEmail(email, "Welcome!!", content);
   }
 
   @Process(EmailType.RESET_PASSWORD)
