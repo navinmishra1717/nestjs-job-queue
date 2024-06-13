@@ -5,11 +5,15 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { BullBoardModule } from "@bull-board/nestjs";
 import { ExpressAdapter } from "@bull-board/express";
+import { ConfigModule } from "@nestjs/config";
 // import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 
 @Module({
   imports: [
-    UsersModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     BullModule.forRoot({
       redis: {
         host: "localhost",
@@ -21,6 +25,8 @@ import { ExpressAdapter } from "@bull-board/express";
       route: "/queues",
       adapter: ExpressAdapter,
     }),
+
+    UsersModule,
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
