@@ -5,8 +5,8 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { BullBoardModule } from "@bull-board/nestjs";
 import { ExpressAdapter } from "@bull-board/express";
-import { ConfigModule } from "@nestjs/config";
-// import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { EmailProvider } from "./providers/email/email.provider";
 
 @Module({
   imports: [
@@ -14,11 +14,14 @@ import { ConfigModule } from "@nestjs/config";
       isGlobal: true,
     }),
 
-    BullModule.forRoot({
-      redis: {
-        host: "localhost",
-        port: 6379,
-      },
+    BullModule.forRootAsync({
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get("QUEUE_HOST"),
+          port: configService.get("QUEUE_PORT"),
+        },
+      }),
+      inject: [ConfigService],
     }),
 
     BullBoardModule.forRoot({
@@ -26,13 +29,14 @@ import { ConfigModule } from "@nestjs/config";
       adapter: ExpressAdapter,
     }),
 
+    EmailProvider, // enables email sending in nestjs using nodemailer
+
     UsersModule,
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
       playground: true,
-      // plugins: [ApolloServerPluginLandingPageLocalDefault()],
       include: [UsersModule],
     }),
   ],

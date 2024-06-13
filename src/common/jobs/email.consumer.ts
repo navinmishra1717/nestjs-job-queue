@@ -2,12 +2,11 @@ import { OnQueueActive, Process, Processor } from "@nestjs/bull";
 import { Job } from "bull";
 import { EmailType } from "../enum/email-type.enum";
 import { EmailSendData } from "../interface/email.interface";
-import { NodemailerService } from "../services/nodemailer.service";
-import { getTemplate } from "../helper/template.helper";
+import { NestMailerService } from "../services/mailer.service";
 
 @Processor("emailSending")
 export class EmailConsumer {
-  constructor(private readonly nodemailerService: NodemailerService) {}
+  constructor(private readonly mailerService: NestMailerService) {}
 
   @OnQueueActive()
   onActive(job: Job) {
@@ -22,9 +21,9 @@ export class EmailConsumer {
       data: { email, name },
     } = job;
 
-    const content = getTemplate("welcomeEmail", { name });
-
-    this.nodemailerService.sendEmail(email, "Welcome!!", content);
+    this.mailerService.sendEmail(email, "Welcome!!", "welcomeEmail", {
+      name,
+    });
   }
 
   @Process(EmailType.RESET_PASSWORD)
